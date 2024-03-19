@@ -4,6 +4,8 @@ const app = express();
 const fs = require('fs');
 const path = require('path');
 const cors = require('cors');
+const env = require('dotenv');
+env.config();
 
 const port = 3000;
 
@@ -15,11 +17,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(express.json());
 const db = mysql2.createConnection({
-    host: 'dev.filmprojekt1.de',
-    port: 3306,
-    user: 'Admin',
-    password: '',
-    database: 'test'
+    host: env.DB_HOST,
+    port: env.DB_PORT,
+    user: env.DB_NAME,
+    password: env.DB_PASSWORD,
+    database: env.DB_DATABASE
 })
 
 
