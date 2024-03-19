@@ -17,11 +17,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(express.json());
 const db = mysql2.createConnection({
-    host: env.DB_HOST,
-    port: env.DB_PORT,
-    user: env.DB_NAME,
-    password: env.DB_PASSWORD,
-    database: env.DB_DATABASE
+    host: "dev.filmprojekt1.de",
+    port: 3306,
+    user: "Admin",
+    password: "",
+    database: "test"
 })
 
 
