@@ -1,6 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const fs = require('fs');
+const path = require('path');
+
+const ordnerPfad = path.join(__dirname, 'audio');
+
+
 router.get('/api/dateien/:dateiname', (req, res) => {
     const dateipfad = path.join(ordnerPfad, req.params.dateiname);
     fs.access(dateipfad, fs.constants.F_OK, (err) => {
