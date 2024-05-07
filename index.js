@@ -16,6 +16,9 @@ const ordnerPfad = path.join(__dirname, 'audio');
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
+const AudioRout = require('./routes/audio');
+
+app.use('/api/v1', AudioRout);
 
 app.get('/api/dateien/:dateiname', (req, res) => {
   const dateipfad = path.join(ordnerPfad, req.params.dateiname);
