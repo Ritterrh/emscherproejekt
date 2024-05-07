@@ -18,3 +18,6 @@ app.listen(port, () => {
   console.log(`Server gestartet auf Port ${port}`);
 });
 
+//TODO 1 - Datenbank API endpoint erstellen
+//TODO 2 - Docker Container erstellen
+
