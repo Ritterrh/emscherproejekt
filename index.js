@@ -5,84 +5,71 @@ const fs = require('fs');
 const path = require('path');
 const cors = require('cors');
 const env = require('dotenv');
+const { test } = require('./helper/db');
+const e = require('express');
+const { isObjectEmpty } = require('./helper/isObjectEmpty');
 env.config();
 
 const port = 3000;
-
 const ordnerPfad = path.join(__dirname, 'audio');
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
-
-
 app.use(express.json());
-const db = mysql2.createConnection({
-    host: "dev.filmprojekt1.de",
-    port: 3306,
-    user: "Admin",
-    password: "",
-    database: "test"
-})
-
-
 
 app.get('/api/dateien/:dateiname', (req, res) => {
-    const dateipfad = path.join(ordnerPfad, req.params.dateiname);
-  
-    fs.access(dateipfad, fs.constants.F_OK, (err) => {
-      if (err) {
-        console.error(err);
-        return res.status(404).send('Datei nicht gefunden');
-      }
-  
-      res.setHeader('Content-Type', 'audio/mpeg');
-      res.setHeader('Content-Disposition', `attachment; filename="${req.params.dateiname}"`);
-      fs.createReadStream(dateipfad).pipe(res);
-    });
+  const dateipfad = path.join(ordnerPfad, req.params.dateiname);
+  fs.access(dateipfad, fs.constants.F_OK, (err) => {
+    if (err) {
+      console.error(err);
+      return res.status(404).send('Datei nicht gefunden');
+    }
+    res.setHeader('Content-Type', 'audio/mpeg');
+    res.setHeader('Content-Disposition', `attachment; filename="${req.params.dateiname}"`);
+    fs.createReadStream(dateipfad).pipe(res);
   });
-
-
-
-app.get('/api/audio', (req, res) => {
-    const userLatitude = parseFloat(req.query.userLatitude);
-    const userLongitude = parseFloat(req.query.userLongitude);
-    const radius = 5; // Radius in Kilometern
-    
-    db.query('SELECT * FROM audio_files', (err, rows) => {
-        if (err) {
-            console.error(err.message);
-           
-   
-            return;
-        }
-
-        const audioFilesInRadius = rows.filter(row => {
-            const distance = calculateDistance(userLatitude, userLongitude, row.latitude, row.longitude);
-            return distance <= radius;
-        });
-
-        res.json({ audioFiles: audioFilesInRadius });
-    });
 });
 
+app.get('/api/audio', async (req, res) => {
+  const userLatitude = req.query.userLatitude;
+  const userLongitude = req.query.userLongitude;
+  const userdata = { lat: userLatitude, long: userLongitude };
 
-
+  try {
+    const results = await test();
+    const latLongArray = results.map((row) => ({ lat: row.lat, long: row.long }));
+    const distances = latLongArray.map((coord) => haversineDistance(userdata, coord));
+    const audioFilesInRadius = results.filter((row, index) => distances[index] <= 5);
+    if(isObjectEmpty(audioFilesInRadius )){
+      res.json({"err": "Keine audio datein im Bereich"})
+    }else{
+      res.json({ audioFiles: audioFilesInRadius });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('Error fetching audio files');
+  }
+});
 
 app.listen(port, () => {
-    console.log(`Server gestartet auf Port ${port}`);
+  console.log(`Server gestartet auf Port ${port}`);
 });
 
+function haversineDistance(coord1, coord2) {
+  const lat1 = toRadians(coord1.lat);
+  const lon1 = toRadians(coord1.long);
+  const lat2 = toRadians(coord2.lat);
+  const lon2 = toRadians(coord2.long);
 
+  const R = 6371; // Earth's radius in kilometers
+  const dLat = lat2 - lat1;
+  const dLon = lon2 - lon1;
 
-
-function calculateDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371; // Erdradius in Kilometern
-    const dLat = (lat2 - lat1) * (Math.PI / 180);
-    const dLon = (lon2 - lon1) * (Math.PI / 180);
-    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const distance = R * c;
-    return distance;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
 }
+
+const toRadians = (degrees) => degrees * (Math.PI / 180);
