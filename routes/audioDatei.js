@@ -6,7 +6,7 @@ const path = require('path');
 const ordnerPfad = path.join(__dirname, 'audio');
 
 
-router.get('/api/dateien/:dateiname', (req, res) => {
+router.get('/file/:dateiname', (req, res) => {
     const dateipfad = path.join(ordnerPfad, req.params.dateiname);
     fs.access(dateipfad, fs.constants.F_OK, (err) => {
       if (err) {
