@@ -8,6 +8,7 @@ const audioInfo_code = document.getElementById("audioInfoCode");
 const audioInfo_titel = document.getElementById("audioInfo");
 const controls = document.getElementById("controls");
 const disalbeinput = document.getElementById("disalbeinput");
+const env = require('dotenv').config();
 window.addEventListener('load', function () {
     setTimeout(function () {
         
@@ -72,7 +73,7 @@ function addDownloadButton(li, songName) {
     if (currentSong) {
       currentSong.classList.remove("darken");
     }
-    audioPlayer.src = `http://localhost:3000/api/v1/file/${songName}.mp3`;
+    audioPlayer.src = `${serverUrl}/api/v1/file/${songName}.mp3`;
     audioPlayer.play();
     isPlaying = true;
     playPauseBtn.textContent = "Pause";
@@ -126,7 +127,7 @@ if (navigator.geolocation) {
 
 function loadAudio(position) {
 
-   fetch(`http://localhost:3000/api/v1/audio?userLatitude=${position.coords.latitude}&userLongitude=${position.coords.longitude}`)
+   fetch(`${env.parsed.SERVERURL}/api/v1/audio?userLatitude=${position.coords.latitude}&userLongitude=${position.coords.longitude}`)
   //fetch(`http://localhost:3000/api/v1/audio?userLatitude=0&userLongitude=0`)
     .then((response) => response.json())
     .then((data) => {
@@ -160,7 +161,7 @@ function loadAudio(position) {
         console.trace(audioData);
         console.count();
 
-        const songSrc = `http://localhost:3000/api/v1/file/${audioName}.mp3`;
+        const songSrc = `${env.parsed.SERVERURL}/api/v1/file/${audioName}.mp3`;
         const li = document.createElement("li");
         li.setAttribute("data-src", songSrc);
         addDownloadButton(li, audioName);
