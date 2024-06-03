@@ -8,7 +8,7 @@ const audioInfo_code = document.getElementById("audioInfoCode");
 const audioInfo_titel = document.getElementById("audioInfo");
 const controls = document.getElementById("controls");
 const disalbeinput = document.getElementById("disalbeinput");
-const env = require('dotenv').config();
+
 window.addEventListener('load', function () {
     setTimeout(function () {
         
@@ -16,7 +16,7 @@ window.addEventListener('load', function () {
 
     }, 2000);
 });
-
+const serverUrl = "http://91.200.100.187:8080"
 let isPlaying = false;
 let isSeeking = false;
 document.querySelector('.loader').classList.add('show');
@@ -127,7 +127,7 @@ if (navigator.geolocation) {
 
 function loadAudio(position) {
 
-   fetch(`${env.parsed.SERVERURL}/api/v1/audio?userLatitude=${position.coords.latitude}&userLongitude=${position.coords.longitude}`)
+   fetch(`${serverUrl}/api/v1/audio?userLatitude=${position.coords.latitude}&userLongitude=${position.coords.longitude}`)
   //fetch(`http://localhost:3000/api/v1/audio?userLatitude=0&userLongitude=0`)
     .then((response) => response.json())
     .then((data) => {
@@ -161,7 +161,7 @@ function loadAudio(position) {
         console.trace(audioData);
         console.count();
 
-        const songSrc = `${env.parsed.SERVERURL}/api/v1/file/${audioName}.mp3`;
+        const songSrc = `${serverUrl}/api/v1/file/${audioName}.mp3`;
         const li = document.createElement("li");
         li.setAttribute("data-src", songSrc);
         addDownloadButton(li, audioName);
