@@ -16,7 +16,7 @@ window.addEventListener('load', function () {
 
     }, 2000);
 });
-const serverUrl = "http://91.200.100.187:8080"
+const serverUrl = "http://api.ruhrkulturerlebnis.de"
 let isPlaying = false;
 let isSeeking = false;
 document.querySelector('.loader').classList.add('show');
