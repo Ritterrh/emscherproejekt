@@ -20,7 +20,7 @@ router.get("/audio", async (req, res) => {
           "isError": "true"
         })
       }else{
-        res.json({ audioFiles: audioFilesInRadius });
+        res.json({ audioGuids: audioFilesInRadius });
       }
     } catch (err) {
       console.log(err);

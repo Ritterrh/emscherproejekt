@@ -4,7 +4,7 @@ async function getAudio(){
     let connection
     try {
         connection = await connectToDatabase;
-        const [results, fields] = await (await connection()).query("SELECT * FROM `audio_files` ");
+        const [results, fields] = await (await connection()).query("SELECT * FROM `audioGuids` ");
         return results  
     } catch (err){
         console.warn(err)

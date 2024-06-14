@@ -13,12 +13,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const AudioDatei = require('./routes/audioDatei');
 const AudioRout = require('./routes/audio');
-const AudioCreate = require('./routes/dev/newAudios.js')
+const AudioCreate = require('./routes/dev/newAudios.js');
+
+const ChangeLog = require('./routes/changelog.js');
 
 app.use('/api/dev/v1', AudioCreate)
 app.use('/api/v1', AudioDatei);
 app.use('/api/v1', AudioRout);
-
+app.use('/api/v1', ChangeLog);
 
 
 app.listen(port, () => {
