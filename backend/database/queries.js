@@ -1,10 +1,10 @@
-const  DB_NAME  = "user"
+const DB_NAME = "user";
 
 const createDB = `CREATE DATABASE IF NOT EXISTS ${DB_NAME}`;
 
 const dropDB = `DROP DATABASE IF EXISTS ${DB_NAME}`;
 
-const createTableUSers = `
+const createTableUsers = `
 CREATE TABLE IF NOT EXISTS users (
     id INT PRIMARY KEY AUTO_INCREMENT,
     firstname VARCHAR(50) NULL,
@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS users (
 `;
 
 const createNewUser = `
-INSERT INTO users VALUES(null, ?, ?, ?, ?, NOW())
+INSERT INTO users (id, firstname, lastname, email, password, created_on) VALUES (null, ?, ?, ?, ?, NOW())
 `;
 
 const findUserByEmail = `
@@ -24,9 +24,9 @@ SELECT * FROM users WHERE email = ?
 `;
 
 module.exports = {
-    createDB,
-    dropDB,
-    createTableUSers,
-    createNewUser,
-    findUserByEmail
+  createDB,
+  dropDB,
+  createTableUsers,
+  createNewUser,
+  findUserByEmail
 };

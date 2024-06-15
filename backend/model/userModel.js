@@ -1,4 +1,4 @@
-const {connectToDatabase} = require("../database/db");
+const { connectToDatabase } = require("../database/db");
 const {
   createNewUser: createNewUserQuery,
   findUserByEmail: findUserByEmailQuery,
@@ -16,46 +16,44 @@ class User {
   static async create(newUser, cb) {
     try {
       const connection = await connectToDatabase();
-      await connection.execute(
-        createNewUserQuery[
-          (newUser.firstname, newUser.lastname, newUser.email, newUser.password)
-        ],
-        (err, res) => {
-          if (err) {
-            logger.error(err.message);
-            cb(err, null);
-            return;
-          }
-          cb(null, {
-            id: res.insertId,
-            firstname: newUser.firstname,
-            lastname: newUser.lastname,
-            email: newUser.email,
-          });
-        }
-      );
+      try {
+        const [res] = await connection.execute(createNewUserQuery, [
+          newUser.firstname,
+          newUser.lastname,
+          newUser.email,
+          newUser.password,
+        ]);
+        cb(null, {
+          id: res.insertId,
+          firstname: newUser.firstname,
+          lastname: newUser.lastname,
+          email: newUser.email,
+        });
+      } finally {
+        connection.end();
+      }
     } catch (err) {
-      logger.error(err);
+      logger.error(err.message);
+      cb(err, null);
     }
   }
 
   static async findByEmail(email, cb) {
     try {
       const connection = await connectToDatabase();
-      connection.execute(findUserByEmailQuery, email, (err, res) => {
-        if (err) {
-          logger.error(err.message);
-          cb(err, null);
-          return;
-        }
+      try {
+        const [res] = await connection.execute(findUserByEmailQuery, [email]);
         if (res.length) {
           cb(null, res[0]);
           return;
         }
         cb({ kind: "not_found" }, null);
-      });
+      } finally {
+        connection.end();
+      }
     } catch (err) {
       logger.error(err.message);
+      cb(err, null);
     }
   }
 }

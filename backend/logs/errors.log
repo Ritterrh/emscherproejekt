@@ -1,3 +1,14 @@
 {"level":"error"}
 {"level":"error"}
 {"level":"error","message":"connectToDatabase is not defined"}
+{"level":"error","message":"this.connection.release is not a function"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'release')"}
+{"level":"error","message":"this.connection.release is not a function"}
+{"level":"error","message":"this.connection.release is not a function"}
+{"level":"error","message":"this.connection.release is not a function"}
+{"level":"error","message":"this.connection.release is not a function"}
+{"level":"error","message":"this.connection.release is not a function"}
+{"level":"error","message":"this.connection.release is not a function"}
+{"level":"error","message":"this.connection.release is not a function"}
+{"level":"error","message":"Unknown column 'firstname' in 'field list'"}
+{"level":"error","message":"Unknown column 'created_on' in 'field list'"}

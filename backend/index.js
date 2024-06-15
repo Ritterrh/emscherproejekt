@@ -24,9 +24,8 @@ app.use("/dev/v1", AudioCreate);
 app.use("/v1", AudioDatei);
 app.use("/v1", AudioRout);
 app.use("/v1", ChangeLog);
-var a = app.use("/v1/auth", Auth);
-a;
-logger.logger.info(a);
+app.use("/v1/auth", Auth);
+
 app.use((err, req, res, next) => {
   res.status(err.statusCode || 500).send({
     status: "error",
