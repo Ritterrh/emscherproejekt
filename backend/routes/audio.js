@@ -1,7 +1,7 @@
 const express = require('express');
-const getAudio = require('../helper/db/getAudio')
-const { haversineDistance } = require('../helper/distance');
-const { isObjectEmpty } = require('../helper/isObjectEmpty');
+const getAudio = require('../database/getAudio')
+const { haversineDistance } = require('../utils/distance');
+const { isObjectEmpty } = require('../utils/isObjectEmpty');
 const router = express.Router();
 router.get("/audio", async (req, res) => {
     const userLatitude = req.query.userLatitude;

@@ -1,5 +1,5 @@
 const express = require('express');
-const {createAudio} = require('../../helper/db/createAudio')
+const {createAudio} = require('../../database/createAudio')
 const router = express.Router();
 
 router.get("/createAudio", async (req, res) => {
