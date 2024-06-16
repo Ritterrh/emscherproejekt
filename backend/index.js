@@ -8,6 +8,11 @@ const logger = require("./utils/logger");
 const port = 8080;
 
 app.use(cors());
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*'); // Allow all origins
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -25,6 +30,7 @@ app.use("/v1", AudioDatei);
 app.use("/v1", AudioRout);
 app.use("/v1", ChangeLog);
 app.use("/v1/auth", Auth);
+app.use("/v1/dev", ChangeLog);
 
 app.use((err, req, res, next) => {
   res.status(err.statusCode || 500).send({

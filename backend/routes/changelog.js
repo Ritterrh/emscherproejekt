@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { connectToDatabase } = require('../database/db');
-
+//TODO: Fix the error
 // Beispiel: Changelog-Daten lesen
 router.get('/changelog', async (req, res) => {
   try {
